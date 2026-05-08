@@ -1,6 +1,7 @@
 import RecentTasks from "@/components/recent-tasks";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Chart } from "@/components/chart";
 
 export default function Tasks() {
   return (
@@ -17,7 +18,7 @@ export default function Tasks() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 m-4">
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
@@ -34,6 +35,9 @@ export default function Tasks() {
               Add a new task to this list...
             </span>
           </button>
+        </div>
+        <div>
+          <Chart />
         </div>
       </div>
     </div>

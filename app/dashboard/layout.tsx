@@ -12,6 +12,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import Settings from "@/components/settings";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function DashboardLayout({
   children,
@@ -39,6 +40,7 @@ export default function DashboardLayout({
             </div>
           </div>
           <div className="flex ">
+            <ModeToggle />
             <Settings />
           </div>
         </header>
