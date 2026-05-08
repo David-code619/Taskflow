@@ -13,27 +13,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { TerminalSquareIcon, BookOpenIcon } from "lucide-react";
+import { CheckSquare, LayoutDashboard, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import AddTask from "./add-task";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  
+
   const items = [
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: <TerminalSquareIcon />,
-
+      icon: <LayoutDashboard />,
     },
     {
       title: "My Tasks",
       url: "/dashboard/tasks",
-      icon: <BookOpenIcon />,
-
+      icon: <CheckSquare />,
     },
   ];
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className=" border-b">
@@ -47,16 +47,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton tooltip={item.title} asChild isActive={pathname === item.url}>
-                  <Link href={item.url} className={'w-full flex items-center gap-3 px-3 py-5 rounded-lg duration-200 ease-in-out font-medium text-sm cursor-pointer '}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  asChild
+                  isActive={pathname === item.url}
+                >
+                  <Link
+                    href={item.url}
+                    className={
+                      "w-full flex items-center gap-3 px-3 py-5 rounded-lg duration-200 ease-in-out font-medium text-sm cursor-pointer "
+                    }
+                  >
                     {item.icon}
-                    <span className="ml-2 text-primary">{item.title}</span>
+                    <span className="ml-2">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarGroup>
+        <AddTask />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
