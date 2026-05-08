@@ -39,7 +39,7 @@ export default function DashboardLayout({
               </InputGroup>
             </div>
           </div>
-          <div className="flex ">
+          <div className="flex justify-between items-center">
             <ModeToggle />
             <Settings />
           </div>

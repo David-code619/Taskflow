@@ -13,7 +13,7 @@ export default function Settings() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="mr-6">
+        <Avatar className="mx-4" size="lg">
           <AvatarImage
             src="https://github.com/shadcn.png"
             alt="@shadcn"

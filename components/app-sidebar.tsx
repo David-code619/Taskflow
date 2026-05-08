@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import TaskFlow from "./sidebar-header";
+import { Button } from "./ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +17,7 @@ import {
 import { CheckSquare, LayoutDashboard, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import AddTask from "./add-task";
+import AddTask from "./forms/add-task";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -66,7 +67,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             ))}
           </SidebarMenu>
         </SidebarGroup>
-        <AddTask />
+        <AddTask>
+          <Button className="w-full">
+            <Plus className="w-5 h-5" />
+            <span>Add Task</span>
+          </Button>
+        </AddTask>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

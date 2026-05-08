@@ -1,5 +1,5 @@
-import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+'use client'
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,17 +25,18 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as z from "zod";
 import {
   InputGroup,
   InputGroupTextarea,
   InputGroupAddon,
   InputGroupText,
-} from "./ui/input-group";
-import { CalendarIcon } from "lucide-react";
+} from "../ui/input-group";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import React, {useState} from "react";
 
 const formSchema = z.object({
   title: z
@@ -50,7 +51,11 @@ const formSchema = z.object({
   priority: z.enum(["low", "medium", "high"], "Please select a priority level"),
 });
 
-export default function AddTask() {
+export default function AddTask({ children }: { children: React.ReactNode }) {
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [open, setOpen] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,18 +66,24 @@ export default function AddTask() {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Form Data:", data);
-  };
+
+    try {
+      setIsLoading(true)
+      console.log("Form Data:", data);
+      form.reset()
+      setOpen(false)
+      
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }; 
 
   return (
     <div>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full">
-            <Plus className="w-5 h-5" />
-            <span>Add Task</span>
-          </Button>
-        </DialogTrigger>
+      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+        <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Create New Task</DialogTitle>
@@ -145,7 +156,7 @@ export default function AddTask() {
                           <Button
                             variant="outline"
                             className={cn(
-                              "justify-start text-left font-normal mb-5",
+                              "justify-start text-left font-normal md:mb-5",
                               !field.value && "text-muted-foreground",
                             )}
                           >
@@ -187,7 +198,7 @@ export default function AddTask() {
                         onValueChange={(val) => {
                           if (val) field.onChange(val);
                         }} // Prevent unselecting
-                        className="justify-start"
+                        className="justify-start mb-3"
                       >
                         <ToggleGroupItem value="low">Low</ToggleGroupItem>
                         <ToggleGroupItem value="medium">Medium</ToggleGroupItem>
@@ -203,10 +214,10 @@ export default function AddTask() {
             </FieldGroup>
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
-                <Button type="button">Close</Button>
+                <Button type="button" variant='outline'>Close</Button>
               </DialogClose>
-              <Button type="submit" form="form-rhf-demo">
-                Submit
+              <Button type="submit" form="form-rhf-demo" disabled={isLoading}>
+                {isLoading ? <Loader2 className="animate-spin"/>  : 'Submit'}
               </Button>
             </DialogFooter>
           </form>
