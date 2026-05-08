@@ -1,4 +1,6 @@
 import RecentTasks from "@/components/recent-tasks";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Tasks() {
   return (
@@ -26,6 +28,12 @@ export default function Tasks() {
             </span>
           </div>
           <RecentTasks />
+          <button className="w-full p-5 rounded-2xl border-2 border-dashed border-border flex items-center justify-center gap-2 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors cursor-pointer group mt-4">
+            <Plus className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="text-sm font-semibold">
+              Add a new task to this list...
+            </span>
+          </button>
         </div>
       </div>
     </div>
