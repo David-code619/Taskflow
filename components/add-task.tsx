@@ -11,8 +11,8 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -131,73 +131,75 @@ export default function AddTask() {
                   </Field>
                 )}
               />
-              <Controller
-                name="dueDate"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-date">
-                      Due Date
-                    </FieldLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                        //   initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="priority"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-priority">
-                      Priority Level
-                    </FieldLabel>
-                    <ToggleGroup
-                      type="single"
-                      variant="outline"
-                      value={field.value}
-                      onValueChange={(val) => {
-                        if (val) field.onChange(val);
-                      }} // Prevent unselecting
-                      className="justify-start"
-                    >
-                      <ToggleGroupItem value="low">Low</ToggleGroupItem>
-                      <ToggleGroupItem value="medium">Medium</ToggleGroupItem>
-                      <ToggleGroupItem value="high">High</ToggleGroupItem>
-                    </ToggleGroup>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-11">
+                <Controller
+                  name="dueDate"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="form-rhf-demo-date">
+                        Due Date
+                      </FieldLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "justify-start text-left font-normal mb-5",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            //   initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="priority"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="form-rhf-demo-priority">
+                        Priority Level
+                      </FieldLabel>
+                      <ToggleGroup
+                        type="single"
+                        variant="outline"
+                        value={field.value}
+                        onValueChange={(val) => {
+                          if (val) field.onChange(val);
+                        }} // Prevent unselecting
+                        className="justify-start"
+                      >
+                        <ToggleGroupItem value="low">Low</ToggleGroupItem>
+                        <ToggleGroupItem value="medium">Medium</ToggleGroupItem>
+                        <ToggleGroupItem value="high">High</ToggleGroupItem>
+                      </ToggleGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
             </FieldGroup>
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
