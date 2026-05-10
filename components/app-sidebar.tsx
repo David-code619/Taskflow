@@ -33,12 +33,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       url: "/dashboard/tasks",
       icon: <CheckSquare />,
     },
+    {
+      title: "Upcoming",
+      url: "/dashboard/upcoming",
+      icon: <CheckSquare />,
+    },
+    {
+      title: "Completed",
+      url: "/dashboard/completed",
+      icon: <CheckSquare />,
+    },
   ];
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className=" border-b">
-        <Link href={"/"} className="data-">
+        <Link href="/">
           <TaskFlow />
         </Link>
       </SidebarHeader>
@@ -65,14 +75,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
+            <AddTask>
+              <Button className="w-full">
+                <Plus className="w-5 h-5" />
+                <span className="group-data-[state=collapsed]:hidden">
+                  Add Task
+                </span>
+              </Button>
+            </AddTask>
           </SidebarMenu>
         </SidebarGroup>
-        <AddTask>
-          <Button className="w-full">
-            <Plus className="w-5 h-5" />
-            <span>Add Task</span>
-          </Button>
-        </AddTask>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

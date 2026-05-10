@@ -7,7 +7,7 @@ export default function TaskFlow() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2">
+    <div className="flex items-center gap-2 px-4 py-2 group-data-[state=collapsed]:justify-center">
       <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
         <Command className="size-4" />
       </div>

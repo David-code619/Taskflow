@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 import {
   Field,
   FieldDescription,
@@ -38,6 +39,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
 
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +53,7 @@ export function LoginForm({
     try {
       setIsLoading(true)
       console.log("Form Data:", data);
+      router.push("/dashboard")
       form.reset();
     } catch (error) {
       console.error(error);

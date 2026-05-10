@@ -4,6 +4,7 @@ import { CheckSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { ModeToggle } from "./mode-toggle";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -50,6 +51,7 @@ export default function Header() {
               </a>
             </div>
             <div className="flex items-center gap-4">
+              <ModeToggle />
               <Button variant="ghost" className="hidden md:block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
                 <Link href="/login">Log in</Link>
               </Button>
