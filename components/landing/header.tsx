@@ -2,9 +2,9 @@
 import { motion } from "motion/react";
 import { CheckSquare } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "../mode-toggle";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);

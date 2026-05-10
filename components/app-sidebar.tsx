@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { CheckSquare, LayoutDashboard, Plus } from "lucide-react";
+import { CheckSquare, LayoutDashboard, Plus, Calendar, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AddTask from "./forms/add-task";
@@ -36,12 +36,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       title: "Upcoming",
       url: "/dashboard/upcoming",
-      icon: <CheckSquare />,
+      icon: <Calendar />,
     },
     {
       title: "Completed",
       url: "/dashboard/completed",
-      icon: <CheckSquare />,
+      icon: <CheckCircle2 />,
     },
   ];
 

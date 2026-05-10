@@ -57,11 +57,10 @@ export default function Upcoming() {
 
   return (
     <div>
-      {" "}
       <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500 pb-20">
         {/* Header Area */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-4">
-          <div className="space-y-1">
+          <div className="space-y-2 mt-10">
             <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-1">
               Schedule Control
             </p>
