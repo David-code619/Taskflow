@@ -29,10 +29,7 @@ const createTaskSchema = z.object({
     .nullable()
     .optional(),
   dueDate: z
-    .string()
-    .datetime()
-    .transform((val) => new Date(val))
-    .nullable()
+    .date()
     .optional(),
   priority: z
     .enum(["NORMAL", "URGENT", "HIGH"])
