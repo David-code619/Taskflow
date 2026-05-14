@@ -13,13 +13,14 @@ datasource db {
 }
 
 enum TaskStatus {
-  PENDING
-  COMPLETED
+  TODO
+  DONE
+  ACTIVE
 }
 
 enum Priority {
-  LOW
-  MEDIUM
+  URGENT
+  NORMAL
   HIGH
 }
 
@@ -91,8 +92,8 @@ model Task {
   id          String     @id @default(cuid())
   title       String
   description String?
-  status      TaskStatus @default(PENDING)
-  priority    Priority   @default(LOW)
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(NORMAL)
   dueDate     DateTime?
   creatorId   String
   creator     User       @relation(fields: [creatorId], references: [id])

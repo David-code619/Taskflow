@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -36,24 +36,28 @@ import {
   InputGroupText,
 } from "../ui/input-group";
 import { CalendarIcon, Loader2 } from "lucide-react";
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { addTask } from "@/lib/actions/task";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z
     .string()
-    .min(5, "Bug title must be at least 5 characters.")
-    .max(32, "Bug title must be at most 32 characters."),
+    .min(5, "Title must be at least 5 characters.")
+    .max(50, "Title must be at most 32 characters."),
   description: z
     .string()
     .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
+    .max(150, "Description must be at most 100 characters."),
   dueDate: z.date("Please select a date"),
-  priority: z.enum(["low", "medium", "high"], "Please select a priority level"),
+  priority: z.enum(
+    ["NORMAL", "URGENT", "HIGH"],
+    "Please select a priority level",
+  ),
 });
 
 export default function AddTask({ children }: { children: React.ReactNode }) {
-
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,24 +65,27 @@ export default function AddTask({ children }: { children: React.ReactNode }) {
     defaultValues: {
       title: "",
       description: "",
-      priority: "low", // Default value for toggle
+      priority: "NORMAL", // Default value for toggle
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true)
-      console.log("Form Data:", data);
-      form.reset()
-      setOpen(false)
-      
+      setIsLoading(true);
+      const response = await addTask(data);
+      if (response.success) {
+        toast.success(response.message)
+        form.reset();
+        setOpen(false);
+      } else {
+        toast.error(response.message)
+      }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }; 
+  };
 
   return (
     <div>
@@ -200,9 +207,9 @@ export default function AddTask({ children }: { children: React.ReactNode }) {
                         }} // Prevent unselecting
                         className="justify-start mb-3"
                       >
-                        <ToggleGroupItem value="low">Low</ToggleGroupItem>
-                        <ToggleGroupItem value="medium">Medium</ToggleGroupItem>
-                        <ToggleGroupItem value="high">High</ToggleGroupItem>
+                        <ToggleGroupItem value="NORMAL">Normal</ToggleGroupItem>
+                        <ToggleGroupItem value="URGENT">Urgent</ToggleGroupItem>
+                        <ToggleGroupItem value="HIGH">High</ToggleGroupItem>
                       </ToggleGroup>
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -214,10 +221,12 @@ export default function AddTask({ children }: { children: React.ReactNode }) {
             </FieldGroup>
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
-                <Button type="button" variant='outline'>Close</Button>
+                <Button type="button" variant="outline">
+                  Close
+                </Button>
               </DialogClose>
               <Button type="submit" form="form-rhf-demo" disabled={isLoading}>
-                {isLoading ? <Loader2 className="animate-spin"/>  : 'Submit'}
+                {isLoading ? <Loader2 className="animate-spin" /> : "Submit"}
               </Button>
             </DialogFooter>
           </form>

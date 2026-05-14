@@ -23,7 +23,7 @@ export default function LogOutBtn() {
     }
   };
   return (
-    <div className="w-full">
+    <div>
       <Button onClick={handleLogout} variant="destructive" className="w-full">
         <LogOutIcon />
         Logout
