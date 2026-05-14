@@ -7,7 +7,10 @@ import {
   ArrowRight,
   Layers,
   ChevronRight,
+  Calendar,
 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "./ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -71,7 +74,8 @@ const mockTasks: Task[] = [
 ];
 
 export default function MyTasks() {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [currentFilter, setCurrentFilter] = useState("all");
+  // const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row bg-background">
@@ -82,6 +86,7 @@ export default function MyTasks() {
 
         <div className="space-y-12 relative z-10">
           <div>
+            {/* Header */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary mb-6 border border-primary/20">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -101,6 +106,7 @@ export default function MyTasks() {
             </p>
           </div>
 
+          {/* Cards */}
           <div className="grid grid-cols-2 gap-4">
             <div className="p-5 rounded-2xl bg-background border border-border shadow-sm flex flex-col gap-2">
               <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
@@ -119,6 +125,7 @@ export default function MyTasks() {
           </div>
         </div>
 
+        {/* Deep Work Button */}
         <div className="mt-12 relative z-10">
           <button className="group w-full bg-foreground text-background rounded-2xl p-6 flex flex-col gap-4 hover:bg-foreground/90 transition-all hover:scale-[1.02] shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(255,255,255,0.05)]">
             <div className="flex items-center justify-between w-full">
@@ -137,18 +144,19 @@ export default function MyTasks() {
 
       {/* RIGHT PANEL: The Queue */}
       <div className="flex-1 flex flex-col relative w-full lg:max-w-[70%]">
-        {/* Top Header / Filters */}
+        {/* Filters */}
         <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-1 bg-muted p-1 rounded-xl">
-            {["all", "active", "done"].map((f) => (
-              <button
-                key={f}
-                className='px-5 py-2 rounded-lg font-mono text-[11px] uppercase tracking-widest transition-all text-muted-foreground hover:text-foreground font-medium"
-                '
-              >
-                {f}
-              </button>
-            ))}
+            <Tabs
+              value={currentFilter}
+              onValueChange={(v) => setCurrentFilter(v)}
+            >
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="active">Active</TabsTrigger>
+                <TabsTrigger value="done">Done</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
           <form className="relative max-w-sm w-full">
@@ -176,19 +184,19 @@ export default function MyTasks() {
                 return (
                   <div
                     key={task.id}
-                    onClick={() => setSelectedTask(task)}
                     className="group flex items-center gap-4 p-4 pr-6 rounded-2xl border transition-all cursor-pointer bg-background hover:shadow-md"
                   >
                     {/* Checkbox Col */}
-                    <button className="w-12 h-12 shrink-0 flex items-center justify-center rounded-xl transition-all border">
-                      <Circle className="w-5 h-5 opacity-40 group-hover:opacity-100" />
-                    </button>
+                      <Checkbox className="w-12 h-12 shrink-0 flex items-center justify-center rounded-xl transition-all border"  />
 
                     {/* Content Col */}
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <div className="flex items-center gap-3 mb-1.5">
                         <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-md flex items-center gap-1">
                           {task.category}
+                        </span>
+                        <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">
+                          <Calendar className="w-3 h-3" /> {task.dueDate}
                         </span>
                       </div>
                       <h3 className="font-semibold text-base truncate transition-all ">
@@ -207,7 +215,7 @@ export default function MyTasks() {
           )}
         </div>
       </div>
-      {selectedTask && (
+      {/* {selectedTask && (
         <Drawer
           direction="right"
           open={!!selectedTask}
@@ -228,7 +236,7 @@ export default function MyTasks() {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
-      )}
+      )} */}
     </div>
   );
 }
