@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+import {authClient} from "@/lib/auth-client";
 import {
   Field,
   FieldDescription,
@@ -24,6 +24,7 @@ import * as z from "zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -37,9 +38,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,16 +48,27 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true)
-      console.log("Form Data:", data);
-      router.push("/dashboard")
+      setIsLoading(true);
+      await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+        callbackURL: "/dashboard",
+      }, {
+        onSuccess: () => {
+          toast.success("Logged in successfully!");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        }
+
+      })
       form.reset();
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -150,9 +160,12 @@ export function LoginForm({
               />
 
               <Field>
-                <Button type="submit" disabled={isLoading}>{isLoading ? <Loader2 className="animate-spin"/>  : 'Login'}</Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="animate-spin" /> : "Login"}
+                </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <Link href="/signup">Sign up</Link>
+                  Don&apos;t have an account?{" "}
+                  <Link href="/signup">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

@@ -1,4 +1,4 @@
-import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { SettingsIcon, UserIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
+import LogOutBtn from "@/components/logOut-btn";  
+
 
 export default function Settings() {
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -32,11 +34,8 @@ export default function Settings() {
           Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
-          
-            <LogOutIcon />
-            <span>Log out</span>
-          
+        <DropdownMenuItem variant="destructive" asChild>
+           <LogOutBtn />      
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
