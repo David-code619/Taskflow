@@ -3,7 +3,7 @@ import { auth } from "../auth";
 import { headers } from "next/headers";
 import prisma from "../prisma";
 import { redirect } from "next/navigation";
-import {revalidatePath} from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export interface Task {
   id?: string;
@@ -36,7 +36,7 @@ export const addTask = async (data: Task) => {
         priority: data.priority,
       },
     });
-    revalidatePath("/dashboard/tasks")
+    revalidatePath("/dashboard/tasks");
 
     return { success: true, message: "Task added successfully" };
   } catch (error) {
@@ -70,11 +70,79 @@ export const getTasks = async (): Promise<Task[]> => {
         status: true,
         dueDate: true,
       },
+      take: 5,
     });
     return tasks;
-
   } catch (error) {
     console.error("Error fetching tasks:", error);
     return [];
   }
 };
+
+export interface WeeklyStats {
+  percentage: number;
+  completed: number;
+  total: number;
+  // textDisplay: string;
+}
+
+export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      redirect("/login");
+    }
+    const userId = session.user.id;
+    if (!userId) {
+      return { percentage: 0, completed: 0, total: 0 };
+    }
+    const now = new Date();
+    const currentDay = now.getDay();
+    console.log("Current Day of Week:", currentDay); // 0 (Sun) to 6 (Sat)
+    const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
+    console.log("Distance to Monday:", distanceToMonday); // e.g., if today is Wed (3), distance is -2
+
+    const startOfWeek = new Date(now.setDate(now.getDate() + distanceToMonday));
+    startOfWeek.setHours(0, 0, 0, 0);
+    console.log("Start of Week:", startOfWeek);
+
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+    console.log("End of Week:", endOfWeek);
+
+    const [completedCount, totalCount] = await prisma.$transaction([
+      prisma.task.count({
+        where: {
+          creatorId: userId,
+          status: "DONE",
+          createdAt: { gte: startOfWeek, lte: endOfWeek },
+        },
+      }),
+      prisma.task.count({
+        where: {
+          creatorId: userId,
+          createdAt: { gte: startOfWeek, lte: endOfWeek },
+        },
+      }),
+    ]);
+
+    const percentage =
+      totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+    console.log("Weekly Efficiency Percentage:", percentage);
+
+    return {
+      percentage,
+      completed: completedCount,
+      total: totalCount,
+      // textDisplay: `${completedCount} / ${totalCount} tasks done`,
+    };
+  } catch (error) {
+    console.error("Database query failed:", error);
+    throw new Error("Failed to compute weekly efficiency metrics");
+  }
+}

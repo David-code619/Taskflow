@@ -1,6 +1,4 @@
 "use client";
-
-
 import { useRouter } from "next/navigation";
 import {
   Zap,
@@ -14,12 +12,20 @@ import {
   Flame,
   TrendingUp,
   Compass,
-  Check,
 } from "lucide-react";
 import { motion } from "motion/react";
+import type { Task, WeeklyStats } from "@/lib/actions/task";
+import { Button } from "./ui/button";
+import KPICard from "./kpi-card";
 
-export default function Dashboard() {
-  const router = useRouter()
+export default function Dashboard({
+  stats,
+  tasks,
+}: {
+  stats: WeeklyStats;
+  tasks: Task[];
+}) {
+  const router = useRouter();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -27,7 +33,7 @@ export default function Dashboard() {
       opacity: 1,
       transition: { staggerChildren: 0.1, delayChildren: 0.1 },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
@@ -35,13 +41,13 @@ export default function Dashboard() {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 100, damping: 20 },
+      transition: { type: "spring" as const, stiffness: 100, damping: 20 },
     },
-  };
+  } as const;
 
   const handleNav = () => {
-    router.push("/dashboard/focus")
-  }
+    router.push("/dashboard/focus");
+  };
 
   return (
     <motion.div
@@ -105,57 +111,27 @@ export default function Dashboard() {
         variants={itemVariants}
         className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10"
       >
-        {[
-          {
-            icon: Target,
-            label: "Weekly Completion",
-            value: "24/32",
-            trend: "+12%",
-            descLine: "Tasks delivered so far",
-          },
-          {
-            icon: Flame,
-            label: "Focus Streak",
-            value: "14",
-            trend: "Days",
-            descLine: "Keep the fire burning",
-          },
-          {
-            icon: Activity,
-            label: "Efficiency Score",
-            value: "94%",
-            trend: "Top 5%",
-            descLine: "Compared to last month",
-          },
-        ].map((stat, i) => (
-          <div
-            key={i}
-            className="group relative bg-card p-8 rounded-[2rem] border border-border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors pointer-events-none" />
-            <div className="relative z-10 flex flex-col h-full justify-between gap-8">
-              <div className="flex justify-between items-start">
-                <div className="w-12 h-12 rounded-2xl bg-muted flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                  <stat.icon className="w-6 h-6 text-primary group-hover:text-foreground transition-colors" />
-                </div>
-                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground bg-background border border-border px-3 py-1.5 rounded-lg">
-                  {stat.trend}
-                </div>
-              </div>
-              <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-2">
-                  {stat.label}
-                </p>
-                <h3 className="text-4xl font-black tracking-tighter text-foreground mb-1">
-                  {stat.value}
-                </h3>
-                <p className="text-xs font-medium text-muted-foreground">
-                  {stat.descLine}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+        <KPICard
+          icon={Target}
+          label="Weekly Completion"
+          value={`${stats.completed}/${stats.total}`}
+          trend="+12%"
+          descLine="Tasks Delivered so far"
+        />
+        <KPICard
+          icon={Flame}
+          label="Focus Streak"
+          value="14"
+          trend="Days"
+          descLine="Keep the fire burning"
+        />
+        <KPICard
+          icon={Activity}
+          label="Efficiency Score"
+          value={`${stats.percentage}%`}
+          trend="Top 5%"
+          descLine="Compared to last month"
+        />
       </motion.section>
 
       {/* Complex Layout */}
@@ -179,61 +155,35 @@ export default function Dashboard() {
                 goal.
               </p>
             </div>
-            <button className="h-10 px-4 rounded-xl border border-border text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2 self-start shrink-0">
+            <Button
+              variant="outline"
+              className="h-10 px-4 rounded-xl border border-border text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2 self-start shrink-0"
+            >
               View All <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+            </Button>
           </div>
 
           <div className="relative z-10 space-y-3 mt-auto">
-            {[
-              {
-                title: "Finalize Q3 Roadmaps",
-                category: "Strategy",
-                status: "In Progress",
-                progress: 85,
-                urgent: true,
-              },
-              {
-                title: "Design System Polish",
-                category: "UI/UX",
-                status: "To Do",
-                progress: 0,
-                urgent: false,
-              },
-              {
-                title: "API Documentation Review",
-                category: "Engineering",
-                status: "In Progress",
-                progress: 45,
-                urgent: false,
-              },
-              {
-                title: "Migrate legacy database schema",
-                category: "Ops",
-                status: "Pending Review",
-                progress: 95,
-                urgent: false,
-              },
-            ].map((task, i) => (
+            {tasks?.map((task) => (
               <div
-                key={i}
+                key={task.id}
                 className="group/task flex flex-col md:flex-row md:items-center justify-between p-5 rounded-[1.5rem] bg-muted/30 border border-transparent hover:border-border hover:bg-card transition-all cursor-pointer gap-4"
               >
                 <div className="flex items-center gap-4">
-                  <div
+                  {/* <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center border-2 shrink-0 ${task.progress === 100 ? "bg-primary border-primary text-primary-foreground" : "border-border group-hover/task:border-primary transition-colors"}`}
                   >
                     {task.progress === 100 && <Check className="w-4 h-4" />}
-                  </div>
+                  </div> */}
                   <div>
                     <span className="block font-bold text-foreground text-lg group-hover/task:translate-x-1 transition-transform">
                       {task.title}
                     </span>
                     <div className="flex items-center gap-2 mt-1">
                       <span
-                        className={`text-[10px] font-black uppercase tracking-wider ${task.urgent ? "text-rose-500" : "text-primary"}`}
+                        className={`text-[10px] font-black uppercase tracking-wider ${task.priority == "URGENT" ? "text-rose-500" : "text-primary"}`}
                       >
-                        {task.category}
+                        Engineering
                       </span>
                       <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
                       <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
@@ -242,7 +192,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 w-full md:w-auto mt-2 md:mt-0 pl-12 md:pl-0">
+                {/* <div className="flex items-center gap-4 w-full md:w-auto mt-2 md:mt-0 pl-12 md:pl-0">
                   <div className="w-32 h-1.5 rounded-full bg-background border border-border overflow-hidden shrink-0 hidden sm:block">
                     <motion.div
                       initial={{ width: 0 }}
@@ -253,7 +203,7 @@ export default function Dashboard() {
                   <span className="text-xs font-mono font-bold w-10 text-right">
                     {task.progress}%
                   </span>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
