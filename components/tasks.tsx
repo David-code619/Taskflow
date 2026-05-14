@@ -1,80 +1,29 @@
-"use client";
-import { useState } from "react";
 import {
   Plus,
-  CheckCircle2,
-  Circle,
   ArrowRight,
   Layers,
-  ChevronRight,
-  Calendar,
+  Clock,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "./ui/checkbox";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { getTasks } from "@/lib/actions/task";
+import TaskList from "@/components/taskList";
 
-interface Task {
-  id: string;
-  title: string;
-  category: string;
-  priority: "urgent" | "high" | "normal";
-  status: "todo" | "active" | "done";
-  dueDate: string;
-  duration?: string;
-  body?: string;
-}
+// const mockTasks: Task[] = [
+//   {
+//     id: "t-01",
+//     title: "Finalize Q3 Performance Architecture",
+//     category: "Engineering",
+//     priority: "urgent",
+//     status: "active",
+//     dueDate: new Date(),
+//     duration: "1.5h",
+//     body: "Review the scalability constraints, test the Redis caching layer under 1M req/s, and prepare findings for the board meeting.",
+//   },
+// ];
 
-const mockTasks: Task[] = [
-  {
-    id: "t-01",
-    title: "Finalize Q3 Performance Architecture",
-    category: "Engineering",
-    priority: "urgent",
-    status: "active",
-    dueDate: "Today, 14:00",
-    duration: "1.5h",
-    body: "Review the scalability constraints, test the Redis caching layer under 1M req/s, and prepare findings for the board meeting.",
-  },
-  {
-    id: "t-02",
-    title: 'Internal Design Review - "Horizon"',
-    category: "Design",
-    priority: "high",
-    status: "todo",
-    dueDate: "Tomorrow, 10:00",
-    duration: "2h",
-    body: "Audit the new dark mode aesthetics and ensure AAA contrast ratios across all primary buttons.",
-  },
-  {
-    id: "t-03",
-    title: "Prepare slides for Stakeholder Briefing",
-    category: "Strategy",
-    priority: "normal",
-    status: "todo",
-    dueDate: "Aug 24, 2023",
-    body: "Highlight technical debt reduction efforts and the Q4 roadmap execution plan.",
-  },
-  {
-    id: "t-04",
-    title: "Compile quarterly runway report",
-    category: "Finance",
-    priority: "normal",
-    status: "done",
-    dueDate: "Yesterday",
-  },
-];
-
-export default function MyTasks() {
-  const [currentFilter, setCurrentFilter] = useState("all");
+export default async function MyTasks() {
+  const tasks = await getTasks();
+  // const [currentFilter, setCurrentFilter] = useState("all");
   // const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   return (
@@ -148,8 +97,8 @@ export default function MyTasks() {
         <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-1 bg-muted p-1 rounded-xl">
             <Tabs
-              value={currentFilter}
-              onValueChange={(v) => setCurrentFilter(v)}
+            // value={currentFilter}
+            // onValueChange={(v) => setCurrentFilter(v)}
             >
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
@@ -171,72 +120,9 @@ export default function MyTasks() {
 
         {/* Task List */}
         <div className="flex-1 p-8 overflow-y-auto">
-          {mockTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-muted-foreground pb-20">
-              <CheckCircle2 className="w-16 h-16 mb-4 opacity-20" />
-              <p className="font-mono text-sm tracking-widest uppercase">
-                Zero Data Required
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {mockTasks.map((task) => {
-                return (
-                  <div
-                    key={task.id}
-                    className="group flex items-center gap-4 p-4 pr-6 rounded-2xl border transition-all cursor-pointer bg-background hover:shadow-md"
-                  >
-                    {/* Checkbox Col */}
-                      <Checkbox className="w-12 h-12 shrink-0 flex items-center justify-center rounded-xl transition-all border"  />
-
-                    {/* Content Col */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center">
-                      <div className="flex items-center gap-3 mb-1.5">
-                        <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-md flex items-center gap-1">
-                          {task.category}
-                        </span>
-                        <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">
-                          <Calendar className="w-3 h-3" /> {task.dueDate}
-                        </span>
-                      </div>
-                      <h3 className="font-semibold text-base truncate transition-all ">
-                        {task.title}
-                      </h3>
-                    </div>
-
-                    {/* Right Action Col */}
-                    <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
-                      <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <TaskList tasks={tasks} />
         </div>
       </div>
-      {/* {selectedTask && (
-        <Drawer
-          direction="right"
-          open={!!selectedTask}
-          onOpenChange={(open) => !open && setSelectedTask(null)}
-        >
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-              <DrawerDescription>
-                This action cannot be undone.
-              </DrawerDescription>
-            </DrawerHeader>
-            <DrawerFooter>
-              <Button>Submit</Button>
-              <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      )} */}
     </div>
   );
 }
