@@ -2,10 +2,8 @@ import {
   Plus,
   ArrowRight,
   Layers,
-  Clock,
 } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getTasks } from "@/lib/actions/task";
+
 import TaskList from "@/components/taskList";
 
 // const mockTasks: Task[] = [
@@ -21,10 +19,8 @@ import TaskList from "@/components/taskList";
 //   },
 // ];
 
-export default async function MyTasks() {
-  const tasks = await getTasks();
+export default function MyTasks() {
   // const [currentFilter, setCurrentFilter] = useState("all");
-  // const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row bg-background">
@@ -91,38 +87,7 @@ export default async function MyTasks() {
         </div>
       </div>
 
-      {/* RIGHT PANEL: The Queue */}
-      <div className="flex-1 flex flex-col relative w-full lg:max-w-[70%]">
-        {/* Filters */}
-        <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-border px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-1 bg-muted p-1 rounded-xl">
-            <Tabs
-            // value={currentFilter}
-            // onValueChange={(v) => setCurrentFilter(v)}
-            >
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="done">Done</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-
-          <form className="relative max-w-sm w-full">
-            <input
-              type="text"
-              placeholder="Quick create..."
-              className="w-full bg-muted/50 border border-transparent focus:bg-background focus:border-border h-11 rounded-xl pl-11 pr-4 text-sm font-medium transition-all outline-none"
-            />
-            <Plus className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          </form>
-        </div>
-
-        {/* Task List */}
-        <div className="flex-1 p-8 overflow-y-auto">
-          <TaskList tasks={tasks} />
-        </div>
-      </div>
+      <TaskList />
     </div>
   );
 }

@@ -79,6 +79,36 @@ export const getTasks = async (): Promise<Task[]> => {
   }
 };
 
+export const updateTask = async (id: string, status: "TODO" | "DONE" | "ACTIVE") => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      redirect("/login");
+    }
+    const userId = session.user.id;
+    if (!userId) {
+      return null;
+    }
+    await prisma.task.update({
+      where: {
+        id: id,
+        creatorId: userId,
+      },
+      data: {
+        status: status,
+      },
+
+    });
+    return {success: true, message: "Task updated successfully"};
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return null;
+  }
+};
+
 export interface WeeklyStats {
   percentage: number;
   completed: number;
@@ -111,6 +141,7 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
 
 
     const endOfWeek = new Date(startOfWeek);
+    console.log("Initial End of Week (Monday):", endOfWeek);
     endOfWeek.setDate(endOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
     console.log("End of Week:", endOfWeek);
