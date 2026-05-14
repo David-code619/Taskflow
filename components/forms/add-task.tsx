@@ -75,11 +75,11 @@ export default function AddTask({ children }: { children: React.ReactNode }) {
       const response = await addTask(data);
       if (response.success) {
         toast.success(response.message)
+        form.reset();
         setOpen(false);
       } else {
         toast.error(response.message)
       }
-      form.reset();
     } catch (error) {
       console.error(error);
     } finally {

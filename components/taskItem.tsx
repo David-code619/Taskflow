@@ -70,7 +70,7 @@ export default function TaskItem({ task }: { task: Task }) {
             </span>
             <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">
               <Calendar className="w-3 h-3" />{" "}
-              {task.dueDate?.toISOString().split("T")[0]}
+              {task.dueDate?.toLocaleDateString().split("T")[0]}
             </span>
           </div>
           <h3 className="font-semibold text-base truncate transition-all ">
@@ -138,7 +138,7 @@ export default function TaskItem({ task }: { task: Task }) {
                   <Calendar className="w-3.5 h-3.5" /> Due Date
                 </div>
                 <div className="font-medium text-sm">
-                  {selectedTask?.dueDate?.toISOString().split("T")[0]}
+                  {selectedTask?.dueDate?.toLocaleDateString().split("T")[0]}
                 </div>
               </div>
               <div className="p-4 rounded-xl border border-border bg-muted/20 space-y-1">

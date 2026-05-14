@@ -15,14 +15,15 @@ export interface Task {
 }
 
 export const addTask = async (data: Task) => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (!session) {
-      redirect("/login");
-    }
+  if (!session) {
+    redirect("/login");
+  }
+
+  try {
     const userId = session.user.id;
     if (!userId) {
       return { success: false, message: "User not authenticated" };
@@ -46,14 +47,15 @@ export const addTask = async (data: Task) => {
 };
 
 export const getTasks = async (): Promise<Task[]> => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (!session) {
-      redirect("/login");
-    }
+  if (!session) {
+    redirect("/login");
+  }
+
+  try {
     const userId = session.user.id;
     if (!userId) {
       return [];
@@ -80,14 +82,15 @@ export const getTasks = async (): Promise<Task[]> => {
 };
 
 export const updateTask = async (id: string, status: "TODO" | "DONE" | "ACTIVE") => {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (!session) {
-      redirect("/login");
-    }
+  if (!session) {
+    redirect("/login");
+  }
+
+  try {
     const userId = session.user.id;
     if (!userId) {
       return null;
@@ -117,14 +120,15 @@ export interface WeeklyStats {
 }
 
 export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (!session) {
-      redirect("/login");
-    }
+  if (!session) {
+    redirect("/login");
+  }
+
+  try {
     const userId = session.user.id;
     if (!userId) {
       return { percentage: 0, completed: 0, total: 0 };
