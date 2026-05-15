@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { updateTask } from "../lib/actions/task";
-
-import type { Task } from "@/lib/actions/task";
 import { toast } from "sonner";
+import { DeleteBtn } from "./deletebtn";
+import type { Task } from "@/lib/actions/task";
+
 
 export default function TaskItem({ task }: { task: Task }) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -93,7 +94,9 @@ export default function TaskItem({ task }: { task: Task }) {
               >
                 View
               </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <DeleteBtn id={task.id} title={task.title} />
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

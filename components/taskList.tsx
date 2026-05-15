@@ -1,4 +1,4 @@
-import { CheckCircle2, Plus } from "lucide-react";
+import { Layers, Plus } from "lucide-react";
 import TaskItem from "./taskItem";
 import { getTasks } from "@/lib/actions/task";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,10 +34,12 @@ export default async function TaskList() {
       <div className="flex-1 p-8 overflow-y-auto">
         {tasks?.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground pb-20">
-            <CheckCircle2 className="w-16 h-16 mb-4 opacity-20" />
-            <p className="font-mono text-sm tracking-widest uppercase">
-              Zero Data Required
-            </p>
+            <div className="w-20 h-20 rounded-full bg-muted/60 flex items-center justify-center mb-6">
+              <Layers className="w-10 h-10 text-muted-foreground/50" />
+            </div>
+            <h4 className="text-2xl font-black tracking-tight text-foreground mb-3">
+              The Queue is Empty
+            </h4>
           </div>
         ) : (
           <div className="space-y-3">
