@@ -5,7 +5,7 @@ export const DashboardSkeleton = () => (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
       <div className="space-y-2 w-full max-w-md">
         <div className="h-3 bg-muted rounded w-32 mb-2"></div>
-        <div className="h-12 bg-muted rounded-lg w-full max-w-[280px]"></div>
+        <div className="h-12 bg-muted rounded-lg w-full max-w-70"></div>
       </div>
       <div className="h-12 bg-muted rounded-xl w-32"></div>
     </div>

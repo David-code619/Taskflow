@@ -110,6 +110,7 @@ export const getTasks = async (): Promise<Task[]> => {
       },
       take: 5,
     });
+    console.log("Get task function was called");
     return tasks;
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -200,8 +201,7 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
 
     const percentage =
       totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-    console.log("Weekly Efficiency Percentage:", percentage);
-
+    console.log("Weekly stats function was called")
     return {
       percentage,
       completed: completedCount,
