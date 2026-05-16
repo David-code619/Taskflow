@@ -28,14 +28,12 @@ const createTaskSchema = z.object({
     .max(1000, "Description must be 1000 characters or less")
     .nullable()
     .optional(),
-  dueDate: z
-    .date()
-    .optional(),
+  dueDate: z.date().optional(),
   priority: z
     .enum(["NORMAL", "URGENT", "HIGH"])
     .refine(
       (val) => ["NORMAL", "URGENT", "HIGH"].includes(val),
-      "Priority must be one of: NORMAL, URGENT, HIGH"
+      "Priority must be one of: NORMAL, URGENT, HIGH",
     ),
 });
 
@@ -112,6 +110,7 @@ export const getTasks = async (): Promise<Task[]> => {
       },
       take: 5,
     });
+    console.log("Get task function was called");
     return tasks;
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -119,7 +118,10 @@ export const getTasks = async (): Promise<Task[]> => {
   }
 };
 
-export const updateTask = async (id: string, status: "TODO" | "DONE" | "ACTIVE") => {
+export const updateTask = async (
+  id: string,
+  status: "TODO" | "DONE" | "ACTIVE",
+) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -141,9 +143,8 @@ export const updateTask = async (id: string, status: "TODO" | "DONE" | "ACTIVE")
       data: {
         status: status,
       },
-
     });
-    return {success: true, message: "Task updated successfully"};
+    return { success: true, message: "Task updated successfully" };
   } catch (error) {
     console.error("Error updating task:", error);
     return null;
@@ -173,20 +174,14 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
     }
     const now = new Date();
     const currentDay = now.getDay();
-    console.log("Current Day of Week:", currentDay); // 0 (Sun) to 6 (Sat)
     const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
-    console.log("Distance to Monday:", distanceToMonday); // e.g., if today is Wed (3), distance is -2
 
     const startOfWeek = new Date(now.setDate(now.getDate() + distanceToMonday));
     startOfWeek.setHours(0, 0, 0, 0);
-    console.log("Start of Week:", startOfWeek);
-
 
     const endOfWeek = new Date(startOfWeek);
-    console.log("Initial End of Week (Monday):", endOfWeek);
     endOfWeek.setDate(endOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
-    console.log("End of Week:", endOfWeek);
 
     const [completedCount, totalCount] = await prisma.$transaction([
       prisma.task.count({
@@ -206,8 +201,7 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
 
     const percentage =
       totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-    console.log("Weekly Efficiency Percentage:", percentage);
-
+    console.log("Weekly stats function was called")
     return {
       percentage,
       completed: completedCount,
@@ -219,3 +213,29 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
     throw new Error("Failed to compute weekly efficiency metrics");
   }
 }
+
+export const deleteTask = async (id: string) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/login");
+  }
+  try {
+    const userId = session.user.id;
+    if (!userId) {
+      return null;
+    }
+    await prisma.task.delete({
+      where: {
+        id: id,
+        creatorId: userId,
+      },
+    });
+    return { success: true, message: "Task deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return null;
+  }
+};
