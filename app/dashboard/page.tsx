@@ -1,4 +1,4 @@
-import Dashboard from "@/components/dashboard";
+import Dashboard from "@/components/dashboard/dashboard";
 import { getTasks, getWeeklyUserEfficiency } from "@/lib/actions/task";
 
 export default async function Dasboard() {

@@ -1,4 +1,4 @@
-import MyTasks from "@/components/tasks";
+import MyTasks from "@/components/tasks/tasks";
 
 export default function Taskspage() {
   return (

@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import type { Task, WeeklyStats } from "@/lib/actions/task";
-import { Button } from "./ui/button";
-import KPICard from "./kpi-card";
+import { Button } from "../ui/button";
+import KPICard from "../kpi-card";
 
 export default function Dashboard({
   stats,

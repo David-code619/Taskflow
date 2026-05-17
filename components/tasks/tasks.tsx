@@ -4,7 +4,7 @@ import {
   Layers,
 } from "lucide-react";
 
-import TaskList from "@/components/taskList";
+import TaskList from "@/components/tasks/taskList";
 
 // const mockTasks: Task[] = [
 //   {
