@@ -157,7 +157,10 @@ export default function Dashboard({
               </p>
             </div>
             {tasks.length > 0 && (
-              <Button variant='outline' className="h-10 px-4 rounded-xl border border-border text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2 self-start shrink-0">
+              <Button
+                variant="outline"
+                className="h-10 px-4 rounded-xl border border-border text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2 self-start shrink-0"
+              >
                 View All <ArrowUpRight className="w-3.5 h-3.5" />
               </Button>
             )}

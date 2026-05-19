@@ -1,4 +1,4 @@
-import Completed from "@/components/completed";
+import Completed from "@/components/completed/completed";
 
 export default function CompletedPage() {
   return (

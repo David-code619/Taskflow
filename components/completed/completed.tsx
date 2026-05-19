@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 export interface Task {
   id: string;
   title: string;
+  
   category: string;
   priority: 'urgent' | 'high' | 'normal';
   status: 'todo' | 'active' | 'done';

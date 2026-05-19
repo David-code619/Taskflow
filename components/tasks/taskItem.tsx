@@ -1,5 +1,5 @@
 "use client";
-import { Checkbox } from "./ui/checkbox";
+import { Checkbox } from "../ui/checkbox";
 import { Calendar, EllipsisVertical, Clock } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,9 +19,9 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { updateTask } from "../lib/actions/task";
+import { updateTask } from "@/lib/actions/task";
 import { toast } from "sonner";
-import { DeleteBtn } from "./deletebtn";
+import { DeleteBtn } from "../deletebtn";
 import type { Task } from "@/lib/actions/task";
 
 
