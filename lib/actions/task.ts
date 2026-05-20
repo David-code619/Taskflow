@@ -3,8 +3,9 @@ import { auth } from "../auth";
 import { headers } from "next/headers";
 import prisma from "../prisma";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
+import { getTasksQuery } from "../queries/db-quries";
 
 export interface Task {
   id?: string;
@@ -14,6 +15,19 @@ export interface Task {
   priority: "NORMAL" | "URGENT" | "HIGH";
   status?: "TODO" | "DONE" | "ACTIVE";
 }
+
+export interface WeeklyStats {
+  percentage: number;
+  completed: number;
+  total: number;
+  // textDisplay: string;
+}
+
+// const revalidateTaskData = (userId: string) => {
+//   revalidateTag(`tasks-${userId}`);
+//   revalidatePath("/dashboard");
+//   revalidatePath("/dashboard/tasks");
+// };
 
 // Zod schema for validating Task input
 const createTaskSchema = z.object({
@@ -69,7 +83,7 @@ export const addTask = async (data: Task) => {
         priority: validatedData.priority,
       },
     });
-    revalidatePath("/dashboard/tasks");
+    // revalidateTaskData(userId);
 
     return { success: true, message: "Task added successfully" };
   } catch (error) {
@@ -96,21 +110,8 @@ export const getTasks = async (): Promise<Task[]> => {
     if (!userId) {
       return [];
     }
-    const tasks = await prisma.task.findMany({
-      where: {
-        creatorId: userId,
-      },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        priority: true,
-        status: true,
-        dueDate: true,
-      },
-      take: 5,
-    });
-    console.log("Get task function was called");
+    const tasks = await getTasksQuery(userId);
+    console.log("Get task server action was called");
     return tasks;
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -144,19 +145,13 @@ export const updateTask = async (
         status: status,
       },
     });
+    // revalidateTaskData(userId);
     return { success: true, message: "Task updated successfully" };
   } catch (error) {
     console.error("Error updating task:", error);
     return null;
   }
 };
-
-export interface WeeklyStats {
-  percentage: number;
-  completed: number;
-  total: number;
-  // textDisplay: string;
-}
 
 export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
   const session = await auth.api.getSession({
@@ -201,12 +196,12 @@ export async function getWeeklyUserEfficiency(): Promise<WeeklyStats> {
 
     const percentage =
       totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-    console.log("Weekly stats function was called")
+    console.log("Weekly stats function was called");
+    console.log(completedCount)
     return {
       percentage,
       completed: completedCount,
       total: totalCount,
-      // textDisplay: `${completedCount} / ${totalCount} tasks done`,
     };
   } catch (error) {
     console.error("Database query failed:", error);
@@ -233,6 +228,7 @@ export const deleteTask = async (id: string) => {
         creatorId: userId,
       },
     });
+    // revalidateTaskData(userId);
     return { success: true, message: "Task deleted successfully" };
   } catch (error) {
     console.error("Error deleting task:", error);
