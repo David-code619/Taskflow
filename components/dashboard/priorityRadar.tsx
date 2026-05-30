@@ -2,9 +2,12 @@
 import { Compass, ArrowUpRight, CheckCircle2, Sparkles, Zap } from "lucide-react";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
-import type { Task } from "@/lib/actions/task";
+import type { Task } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 export default function PriorityRadar({tasks} : {tasks: Task[]}) {
+const router = useRouter()
+
   const itemVariants = {
     hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
     visible: {
@@ -14,6 +17,10 @@ export default function PriorityRadar({tasks} : {tasks: Task[]}) {
       transition: { type: "spring" as const, stiffness: 100, damping: 20 },
     },
   } as const;
+
+  const handleClick = () => {
+      router.push("/dashboard/tasks")
+  }
   return (
     <div>
       {/* Complex Layout */}
@@ -40,6 +47,7 @@ export default function PriorityRadar({tasks} : {tasks: Task[]}) {
             {tasks.length > 0 && (
               <Button
                 variant="outline"
+                onClick={handleClick}
                 className="h-10 px-4 rounded-xl border border-border text-xs font-bold uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2 self-start shrink-0"
               >
                 View All <ArrowUpRight className="w-3.5 h-3.5" />

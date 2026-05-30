@@ -1,11 +1,11 @@
 "use server";
-import { Task } from "../actions/task";
+import { type Task } from "../../types/types";
 import prisma from "../prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
 export const getTasksQuery = async (userId: string): Promise<Task[]> => {
-  // "use cache";
-  // cacheLife("hours");
+  "use cache";
+  cacheLife("minutes");
   // cacheTag(`tasks-${userId}`);
 
   try {

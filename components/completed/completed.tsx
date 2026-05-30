@@ -53,46 +53,6 @@ nextDay3.setHours(15, 0, 0, 0);
 //     duration: '1.5h',
 //     body: 'Review the scalability constraints, test the Redis caching layer under 1M req/s, and prepare findings for the board meeting.'
 //   },
-//   {
-//     id: 't-02',
-//     title: 'Internal Design Review - "Horizon"',
-//     category: 'Design',
-//     priority: 'high',
-//     status: 'todo',
-//     progress: 0,
-//     dueDate: tomorrow1000,
-//     duration: '2h',
-//     body: 'Audit the new dark mode aesthetics and ensure AAA contrast ratios across all primary buttons.'
-//   },
-//   {
-//     id: 't-03',
-//     title: 'Prepare slides for Stakeholder Briefing',
-//     category: 'Strategy',
-//     priority: 'normal',
-//     status: 'todo',
-//     progress: 0,
-//     dueDate: nextDay2,
-//     body: 'Highlight technical debt reduction efforts and the Q4 roadmap execution plan.'
-//   },
-//   {
-//     id: 't-04',
-//     title: 'Migrate legacy database schema',
-//     category: 'Ops',
-//     priority: 'normal',
-//     status: 'active',
-//     progress: 95,
-//     dueDate: nextDay3,
-//     body: 'Ensure zero downtime during the cutover. Monitor the replication lag.'
-//   },
-//   {
-//     id: 't-05',
-//     title: 'Compile quarterly runway report',
-//     category: 'Finance',
-//     priority: 'normal',
-//     status: 'done',
-//     progress: 100,
-//     dueDate: yesterday,
-//   }
 // ];
 
 export default async function Completed() {

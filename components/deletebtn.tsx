@@ -1,6 +1,6 @@
-'use client'
-import { useState } from 'react'
-import { Trash2Icon } from "lucide-react"
+"use client";
+import { useState } from "react";
+import { Trash2Icon } from "lucide-react";
 
 import {
   AlertDialog,
@@ -13,11 +13,17 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { deleteTask } from "@/lib/actions/task"
-import { toast } from "sonner"
+} from "@/components/ui/alert-dialog";
+import { deleteTask } from "@/lib/actions/task";
+import { toast } from "sonner";
 
-export function DeleteBtn({ id, title }: { id: string | undefined; title: string }) {
+export function DeleteBtn({
+  id,
+  title,
+}: {
+  id: string | undefined;
+  title: string;
+}) {
   const [open, setOpen] = useState(false);
 
   async function handleDelete() {
@@ -37,10 +43,11 @@ export function DeleteBtn({ id, title }: { id: string | undefined; title: string
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger onClick={(e) => e.stopPropagation()}>
-        <span className="text-destructive text-sm font-medium cursor-pointer">
-          Delete
-        </span>
+      <AlertDialogTrigger
+        onClick={(e) => e.stopPropagation()}
+        className="p-1.5 hover:bg-destructive/10 hover:text-destructive rounded-xl opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-sm border border-transparent hover:border-destructive/30 focus:outline-none focus:ring-2 focus:ring-destructive focus:bg-destructive/10 focus:text-destructive"
+      >
+        <Trash2Icon className="h-4 text-destructive" />
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
@@ -49,7 +56,8 @@ export function DeleteBtn({ id, title }: { id: string | undefined; title: string
           </AlertDialogMedia>
           <AlertDialogTitle>Delete task?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete &quot;{title}&quot;. This action cannot be undone.
+            This will permanently delete &quot;{title}&quot;. This action cannot
+            be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -60,6 +68,5 @@ export function DeleteBtn({ id, title }: { id: string | undefined; title: string
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
-
